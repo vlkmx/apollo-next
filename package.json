@@ -1,0 +1,41 @@
+{
+  "name": "apollo-next",
+  "version": "1.0.0",
+  "description": "Apollo HOC for Next.js",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "tsc -p tsconfig.json --noemit"
+  },
+  "author": "vlkmx",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vlkmx/apollo-next.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vlkmx/apollo-next/issues"
+  },
+  "publishConfig": {
+    "directory": "dist",
+    "access": "public"
+  },
+  "peerDependencies": {
+    "next": "^13.0.0 || ^14.0.0 || ^15.0.0",
+    "react": "^16.6.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": "^16.6.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@apollo/client": "^3.13.8",
+    "@types/node": "^22.15.21",
+    "@types/react": "^19.1.5",
+    "@types/react-dom": "^19.1.5",
+    "graphql": "^16.11.0",
+    "next": "^15.1.8",
+    "prettier": "^3.5.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "typescript": "^5.8.3"
+  }
+}
