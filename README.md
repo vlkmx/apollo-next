@@ -1,4 +1,4 @@
-# next-with-apollo
+# apollo-next
 
 Apollo HOC for Next.js.
 
