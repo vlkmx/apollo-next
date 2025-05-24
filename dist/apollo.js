@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = initApollo;
-var _apolloClient;
-function initApollo(clientFn, options) {
+let _apolloClient;
+export default function initApollo(clientFn, options) {
     if (!clientFn) {
         throw new Error('[withApollo] the first param is missing and is required to get the ApolloClient');
     }
@@ -14,8 +11,7 @@ function initApollo(clientFn, options) {
     }
     return _apolloClient;
 }
-function getClient(clientFn, options) {
-    if (options === void 0) { options = {}; }
+function getClient(clientFn, options = {}) {
     if (typeof clientFn !== 'function') {
         throw new Error('[withApollo] requires a function that returns an ApolloClient');
     }
