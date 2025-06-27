@@ -1,6 +1,6 @@
+import React from 'react';
 import { NextPage } from 'next';
 import App from 'next/app';
-import React from 'react';
 import initApollo from './apollo';
 import { ApolloContext, InitApolloClient, WithApolloOptions, WithApolloProps, WithApolloState } from './types';
 

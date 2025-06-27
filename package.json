@@ -1,9 +1,12 @@
 {
   "name": "apollo-next",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Apollo HOC for Next.js",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "typescript": {
+    "definition": "dist/index.d.ts"
+  },
   "scripts": {
     "build": "tsc",
     "test": "tsc -p tsconfig.json --noemit"
