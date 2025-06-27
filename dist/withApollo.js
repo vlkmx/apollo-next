@@ -1,3 +1,4 @@
+"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -9,13 +10,18 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-import React from 'react';
-import initApollo from './apollo';
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = withApollo;
+const react_1 = __importDefault(require("react"));
+const apollo_1 = __importDefault(require("./apollo"));
 // Gets the display name of a JSX component for dev tools
 function getDisplayName(Component) {
     return Component.displayName || Component.name || 'Unknown';
 }
-export default function withApollo(client, options = {}) {
+function withApollo(client, options = {}) {
     return (Page, pageOptions = {}) => {
         const getInitialProps = Page.getInitialProps;
         const getDataFromTree = 'getDataFromTree' in pageOptions ? pageOptions.getDataFromTree : options.getDataFromTree;
@@ -24,7 +30,7 @@ export default function withApollo(client, options = {}) {
         function WithApollo(_a) {
             var { apollo, apolloState, router } = _a, props = __rest(_a, ["apollo", "apolloState", "router"]);
             const apolloClient = apollo ||
-                initApollo(client, {
+                (0, apollo_1.default)(client, {
                     initialState: apolloState === null || apolloState === void 0 ? void 0 : apolloState.data,
                     router
                 });
@@ -34,7 +40,7 @@ export default function withApollo(client, options = {}) {
                     props: Object.assign(Object.assign({}, props), { apollo: apolloClient })
                 });
             }
-            return React.createElement(Page, Object.assign({}, props, { apollo: apolloClient }));
+            return react_1.default.createElement(Page, Object.assign({}, props, { apollo: apolloClient }));
         }
         WithApollo.displayName = `WithApollo(${getDisplayName(Page)})`;
         if (getInitialProps || getDataFromTree) {
@@ -43,7 +49,7 @@ export default function withApollo(client, options = {}) {
                 const router = 'Component' in pageCtx ? pageCtx.router : undefined;
                 const { AppTree } = pageCtx;
                 const headers = ctx.req ? ctx.req.headers : {};
-                const apollo = initApollo(client, {
+                const apollo = (0, apollo_1.default)(client, {
                     ctx,
                     headers,
                     router
@@ -62,7 +68,7 @@ export default function withApollo(client, options = {}) {
                         try {
                             const props = Object.assign(Object.assign({}, pageProps), { apolloState, apollo });
                             const appTreeProps = 'Component' in pageCtx ? props : { pageProps: props };
-                            await getDataFromTree(React.createElement(AppTree, Object.assign({}, appTreeProps)));
+                            await getDataFromTree(react_1.default.createElement(AppTree, Object.assign({}, appTreeProps)));
                         }
                         catch (error) {
                             if (onError) {
