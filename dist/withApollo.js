@@ -22,7 +22,7 @@ function getDisplayName(Component) {
     return Component.displayName || Component.name || 'Unknown';
 }
 function withApollo(client, options = {}) {
-    return (Page, pageOptions = {}) => {
+    return async (Page, pageOptions = {}) => {
         const getInitialProps = Page.getInitialProps;
         const getDataFromTree = 'getDataFromTree' in pageOptions ? pageOptions.getDataFromTree : options.getDataFromTree;
         const render = pageOptions.render || options.render;
