@@ -12,7 +12,7 @@ function getDisplayName(Component: React.ComponentType<any>) {
 export default function withApollo<TCache = any>(client: InitApolloClient<TCache>, options: WithApolloOptions = {}) {
   type ApolloProps = Partial<WithApolloProps<TCache>>;
 
-  return async (Page: NextPage<any> | typeof App, pageOptions: WithApolloOptions = {}) => {
+  return (Page: NextPage<any> | typeof App, pageOptions: WithApolloOptions = {}) => {
     const getInitialProps = Page.getInitialProps;
     const getDataFromTree = 'getDataFromTree' in pageOptions ? pageOptions.getDataFromTree : options.getDataFromTree;
     const render = pageOptions.render || options.render;
