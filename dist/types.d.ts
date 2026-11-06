@@ -2,7 +2,7 @@ import { ApolloClient } from '@apollo/client';
 import { IncomingHttpHeaders } from 'http';
 import { NextPage, NextPageContext } from 'next';
 import { AppContext } from 'next/app';
-import { NextRouter } from 'next/dist/client/router';
+import { NextRouter } from 'next/router';
 import { ReactNode } from 'react';
 export interface WithApolloOptions {
     getDataFromTree?: (tree: ReactNode, context?: {
@@ -19,7 +19,7 @@ export interface WithApolloState<TCache> {
 }
 export interface WithApolloProps<TCache> {
     apolloState: WithApolloState<TCache>;
-    apollo: ApolloClient<TCache>;
+    apollo: ApolloClient;
     router: NextRouter;
 }
 export interface InitApolloOptions<TCache> {
@@ -28,9 +28,9 @@ export interface InitApolloOptions<TCache> {
     router?: NextRouter;
     initialState?: TCache;
 }
-export type InitApolloClient<TCache> = (options: InitApolloOptions<TCache>) => ApolloClient<TCache>;
+export type InitApolloClient<TCache> = (options: InitApolloOptions<TCache>) => ApolloClient;
 export interface ApolloPageContext<C = any> extends NextPageContext {
-    apolloClient: ApolloClient<C>;
+    apolloClient: ApolloClient;
 }
 export interface ApolloAppContext<C = any> extends AppContext {
     ctx: ApolloPageContext<C>;

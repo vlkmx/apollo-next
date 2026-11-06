@@ -1,12 +1,12 @@
 import { ApolloClient } from '@apollo/client';
 import { InitApolloClient, InitApolloOptions } from './types';
 
-let _apolloClient: ApolloClient<any>;
+let _apolloClient: ApolloClient;
 
 export default function initApollo<TCache = any>(
   clientFn: InitApolloClient<TCache>,
   options?: InitApolloOptions<TCache>
-): ApolloClient<TCache> {
+): ApolloClient {
   if (!clientFn) {
     throw new Error('[withApollo] the first param is missing and is required to get the ApolloClient');
   }

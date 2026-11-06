@@ -81,7 +81,7 @@ export default function withApollo<TCache = any>(client: InitApolloClient<TCache
               }
             }
 
-            apolloState.data = apollo.cache.extract();
+            apolloState.data = apollo.cache.extract() as TCache;
           }
         }
 
