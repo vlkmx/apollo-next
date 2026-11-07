@@ -1,4 +1,6 @@
 import React from 'react';
+import { prerenderStatic } from '@apollo/client/react/ssr';
+import { prerenderToNodeStream } from 'react-dom/static';
 import { NextPage } from 'next';
 import App from 'next/app';
 import initApollo from './apollo';
@@ -14,7 +16,7 @@ export default function withApollo<TCache = any>(client: InitApolloClient<TCache
 
   return (Page: NextPage<any> | typeof App, pageOptions: WithApolloOptions = {}) => {
     const getInitialProps = Page.getInitialProps;
-    const getDataFromTree = 'getDataFromTree' in pageOptions ? pageOptions.getDataFromTree : options.getDataFromTree;
+    const ssr = pageOptions.ssr ?? options.ssr ?? false;
     const render = pageOptions.render || options.render;
     const onError = pageOptions.onError || options.onError;
 
@@ -38,7 +40,7 @@ export default function withApollo<TCache = any>(client: InitApolloClient<TCache
 
     WithApollo.displayName = `WithApollo(${getDisplayName(Page)})`;
 
-    if (getInitialProps || getDataFromTree) {
+    if (getInitialProps || ssr) {
       WithApollo.getInitialProps = async (pageCtx: ApolloContext) => {
         const ctx = 'Component' in pageCtx ? pageCtx.ctx : pageCtx;
         const router = 'Component' in pageCtx ? pageCtx.router : undefined;
@@ -63,20 +65,24 @@ export default function withApollo<TCache = any>(client: InitApolloClient<TCache
             return pageProps;
           }
 
-          if (getDataFromTree) {
+          if (ssr) {
             try {
               const props = { ...pageProps, apolloState, apollo };
               const appTreeProps = 'Component' in pageCtx ? props : { pageProps: props };
 
-              await getDataFromTree(<AppTree {...appTreeProps} />);
+              await prerenderStatic({
+                tree: <AppTree {...appTreeProps} />,
+                context: { client: apollo },
+                renderFunction: prerenderToNodeStream,
+                ignoreResults: true
+              });
             } catch (error) {
               if (onError) {
                 onError(error as Error, ctx);
               } else {
                 // Prevent Apollo Client GraphQL errors from crashing SSR.
                 if (process.env.NODE_ENV !== 'production') {
-                  // tslint:disable-next-line no-console This is a necessary debugging log
-                  console.error('GraphQL error occurred [getDataFromTree]', error);
+                  console.error('GraphQL error occurred [apollo-next SSR]', error);
                 }
               }
             }

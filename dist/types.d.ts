@@ -3,11 +3,9 @@ import { IncomingHttpHeaders } from 'http';
 import { NextPage, NextPageContext } from 'next';
 import { AppContext } from 'next/app';
 import { NextRouter } from 'next/router';
-import { ReactNode } from 'react';
 export interface WithApolloOptions {
-    getDataFromTree?: (tree: ReactNode, context?: {
-        [key: string]: any;
-    }) => Promise<any>;
+    /** Prefetch queries on the server. Defaults to false; a page can override the global option. */
+    ssr?: boolean;
     render?: (props: {
         Page: NextPage<any>;
         props: any;

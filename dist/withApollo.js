@@ -16,6 +16,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = withApollo;
 const react_1 = __importDefault(require("react"));
+const ssr_1 = require("@apollo/client/react/ssr");
+const static_1 = require("react-dom/static");
 const apollo_1 = __importDefault(require("./apollo"));
 // Gets the display name of a JSX component for dev tools
 function getDisplayName(Component) {
@@ -23,8 +25,9 @@ function getDisplayName(Component) {
 }
 function withApollo(client, options = {}) {
     return (Page, pageOptions = {}) => {
+        var _a, _b;
         const getInitialProps = Page.getInitialProps;
-        const getDataFromTree = 'getDataFromTree' in pageOptions ? pageOptions.getDataFromTree : options.getDataFromTree;
+        const ssr = (_b = (_a = pageOptions.ssr) !== null && _a !== void 0 ? _a : options.ssr) !== null && _b !== void 0 ? _b : false;
         const render = pageOptions.render || options.render;
         const onError = pageOptions.onError || options.onError;
         function WithApollo(_a) {
@@ -43,7 +46,7 @@ function withApollo(client, options = {}) {
             return react_1.default.createElement(Page, Object.assign({}, props, { apollo: apolloClient }));
         }
         WithApollo.displayName = `WithApollo(${getDisplayName(Page)})`;
-        if (getInitialProps || getDataFromTree) {
+        if (getInitialProps || ssr) {
             WithApollo.getInitialProps = async (pageCtx) => {
                 const ctx = 'Component' in pageCtx ? pageCtx.ctx : pageCtx;
                 const router = 'Component' in pageCtx ? pageCtx.router : undefined;
@@ -64,11 +67,16 @@ function withApollo(client, options = {}) {
                     if (ctx.res && (ctx.res.headersSent || ctx.res.finished)) {
                         return pageProps;
                     }
-                    if (getDataFromTree) {
+                    if (ssr) {
                         try {
                             const props = Object.assign(Object.assign({}, pageProps), { apolloState, apollo });
                             const appTreeProps = 'Component' in pageCtx ? props : { pageProps: props };
-                            await getDataFromTree(react_1.default.createElement(AppTree, Object.assign({}, appTreeProps)));
+                            await (0, ssr_1.prerenderStatic)({
+                                tree: react_1.default.createElement(AppTree, Object.assign({}, appTreeProps)),
+                                context: { client: apollo },
+                                renderFunction: static_1.prerenderToNodeStream,
+                                ignoreResults: true
+                            });
                         }
                         catch (error) {
                             if (onError) {
@@ -77,8 +85,7 @@ function withApollo(client, options = {}) {
                             else {
                                 // Prevent Apollo Client GraphQL errors from crashing SSR.
                                 if (process.env.NODE_ENV !== 'production') {
-                                    // tslint:disable-next-line no-console This is a necessary debugging log
-                                    console.error('GraphQL error occurred [getDataFromTree]', error);
+                                    console.error('GraphQL error occurred [apollo-next SSR]', error);
                                 }
                             }
                         }
