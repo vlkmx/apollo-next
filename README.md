@@ -2,7 +2,7 @@
 
 Apollo HOC for the Next.js **Pages Router**. Version 3 supports Next.js 16, React 19, Apollo Client 4 and Node.js 20.9+. App Router is not supported.
 
-Install `apollo-next`, `@apollo/client` and `graphql` in the consuming app.
+Install `apollo-next`, `@apollo/client`, `graphql` and `rxjs` in the consuming app.
 
 ## Usage
 
